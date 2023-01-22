@@ -6,7 +6,9 @@ import { fileURLToPath } from 'url';
 import { readFile } from 'fs/promises';
 
 const { version } = JSON.parse(
-    await readFile(join(fileURLToPath(dirname(import.meta.url)) + '/../package.json')),
+    await readFile(
+        join(fileURLToPath(dirname(import.meta.url)) + '/../package.json')
+    )
 );
 
 async function swaggerGenerator(fastify, opts) {
@@ -15,13 +17,13 @@ async function swaggerGenerator(fastify, opts) {
             info: {
                 title: 'Fastify-project',
                 description: 'Fastify-project documentation',
-                version,
+                version
             },
             externalDocs: {
                 url: 'https://github.com/MaRrRa23/fastify-project',
-                description: 'Find more info here',
+                description: 'Find more info here'
             },
-            host: 'localhost',
+            host: 'localhost:8000',
             schemes: ['http', 'https'],
             consumes: ['application/json'],
             produces: ['application/json', 'text/html'],
@@ -29,26 +31,25 @@ async function swaggerGenerator(fastify, opts) {
                 Bearer: {
                     type: 'apiKey',
                     name: 'Bearer',
-                    in: 'header',
+                    in: 'header'
                 },
                 Csrf: {
                     type: 'apiKey',
                     name: 'x-csrf-token',
-                    in: 'header',
-                },
-            },
+                    in: 'header'
+                }
+            }
         },
-
-        exposeRoute: fastify.config.NODE_ENV !== 'production',
+        exposeRoute: fastify.config.NODE_ENV !== 'production'
     });
 
     if (fastify.config.NODE_ENV !== 'production') {
         await fastify.register(fastifySwaggerUi, {
-            routePrefix: '/documentation',
+            routePrefix: '/documentation'
         });
     }
 }
 
 export default fastifyPlugin(swaggerGenerator, {
-    name: 'swaggerGenerator',
+    name: 'swaggerGenerator'
 });
